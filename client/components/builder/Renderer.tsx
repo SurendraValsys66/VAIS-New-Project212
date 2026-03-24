@@ -118,7 +118,6 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
         className={cn(
           "group relative border border-transparent hover:border-valasys-orange rounded-md transition-all",
           isDragging && "opacity-30",
-          component.type === "section" && "my-4",
           component.type === "column" && "w-full md:w-auto h-full",
         )}
         style={{
