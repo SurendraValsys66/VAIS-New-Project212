@@ -1,5 +1,6 @@
 import React from "react";
 import { LandingPageBlock } from "./types";
+import { getBlockStyles } from "./utils";
 
 interface BlockPreviewProps {
   block: LandingPageBlock;
@@ -14,17 +15,14 @@ export const SectionBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 rounded-lg ${
         isSelected ? "border-valasys-orange" : "border-gray-300"
       }`}
-      style={{
-        backgroundColor: props.backgroundColor,
-        padding: props.padding,
-        minHeight: props.minHeight,
-      }}
+      style={blockStyles}
     >
       <div>
         {block.children && block.children.length > 0 ? (
@@ -51,6 +49,7 @@ export const RowBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
@@ -58,9 +57,9 @@ export const RowBlockPreview: React.FC<BlockPreviewProps> = ({
         isSelected ? "border-valasys-orange" : "border-gray-300"
       }`}
       style={{
+        ...blockStyles,
         display: props.display || "grid",
         gridTemplateColumns: props.gridTemplateColumns || "repeat(12, 1fr)",
-        gap: props.gap || "12px",
       }}
     >
       {block.children && block.children.length > 0 ? (
@@ -94,6 +93,7 @@ export const ColumnBlockPreview: React.FC<BlockPreviewProps> = ({
 }) => {
   const props = block.properties;
   const hasContent = block.children && block.children.length > 0;
+  const blockStyles = getBlockStyles(props);
 
   return (
     <div
@@ -104,11 +104,10 @@ export const ColumnBlockPreview: React.FC<BlockPreviewProps> = ({
           : "border border-dashed border-gray-300 bg-gray-50"
       }`}
       style={{
-        // Only use minHeight if there's content or if explicitly set to something meaningful
+        ...blockStyles,
         minHeight: hasContent
           ? (props.minHeight || "auto")
           : (props.minHeight && props.minHeight !== "60px" ? props.minHeight : "60px"),
-        padding: props.padding || "12px",
       }}
     >
       {hasContent ? (

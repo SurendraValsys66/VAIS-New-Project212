@@ -48,6 +48,34 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, label }) => 
   </div>
 );
 
+const NumberInput: React.FC<{
+  label: string;
+  value: string | number;
+  onChange: (value: string) => void;
+  unit?: string;
+  step?: number;
+  min?: number;
+  max?: number;
+}> = ({ label, value, onChange, unit = "", step = 1, min, max }) => (
+  <div>
+    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+      {label}
+    </Label>
+    <div className="flex gap-2">
+      <Input
+        type="number"
+        step={step}
+        min={min}
+        max={max}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="flex-1"
+      />
+      {unit && <span className="flex items-center text-xs text-gray-500">{unit}</span>}
+    </div>
+  </div>
+);
+
 export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
   block,
   onBlockUpdate,
@@ -232,6 +260,28 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
           </div>
         );
 
+      case "testimonials":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Section Heading
+              </Label>
+              <Input
+                type="text"
+                value={props.heading || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, heading: e.target.value },
+                  })
+                }
+                placeholder="What Our Clients Say"
+              />
+            </div>
+          </div>
+        );
+
       case "about":
         return (
           <div className="space-y-4">
@@ -265,6 +315,28 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-valasys-orange"
                 rows={3}
               />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Image Position
+              </Label>
+              <Select
+                value={props.imagePosition || "left"}
+                onValueChange={(val) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, imagePosition: val },
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="left">Left</SelectItem>
+                  <SelectItem value="right">Right</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         );
@@ -304,7 +376,7 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
             </div>
             <div>
               <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                Button Text
+                Submit Button Text
               </Label>
               <Input
                 type="text"
@@ -317,6 +389,197 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
                 }
               />
             </div>
+          </div>
+        );
+
+      case "footer":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Company Name
+              </Label>
+              <Input
+                type="text"
+                value={props.companyName || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, companyName: e.target.value },
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Description
+              </Label>
+              <textarea
+                value={props.companyDescription || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, companyDescription: e.target.value },
+                  })
+                }
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-valasys-orange"
+                rows={2}
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Email
+              </Label>
+              <Input
+                type="email"
+                value={props.email || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, email: e.target.value },
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Phone
+              </Label>
+              <Input
+                type="tel"
+                value={props.phone || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, phone: e.target.value },
+                  })
+                }
+              />
+            </div>
+          </div>
+        );
+
+      case "pricing":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Section Heading
+              </Label>
+              <Input
+                type="text"
+                value={props.heading || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, heading: e.target.value },
+                  })
+                }
+                placeholder="Our Pricing"
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Subheading
+              </Label>
+              <Input
+                type="text"
+                value={props.subheading || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, subheading: e.target.value },
+                  })
+                }
+                placeholder="Choose the right plan for your needs"
+              />
+            </div>
+          </div>
+        );
+
+      case "faq":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Section Heading
+              </Label>
+              <Input
+                type="text"
+                value={props.heading || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, heading: e.target.value },
+                  })
+                }
+                placeholder="Frequently Asked Questions"
+              />
+            </div>
+          </div>
+        );
+
+      case "signup":
+        return (
+          <div className="space-y-4">
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Heading
+              </Label>
+              <Input
+                type="text"
+                value={props.heading || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, heading: e.target.value },
+                  })
+                }
+                placeholder="Sign Up Today"
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Subheading
+              </Label>
+              <Input
+                type="text"
+                value={props.subheading || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, subheading: e.target.value },
+                  })
+                }
+                placeholder="Get started with our service"
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                Button Text
+              </Label>
+              <Input
+                type="text"
+                value={props.buttonText || ""}
+                onChange={(e) =>
+                  onBlockUpdate({
+                    ...block,
+                    properties: { ...props, buttonText: e.target.value },
+                  })
+                }
+                placeholder="Get Started"
+              />
+            </div>
+          </div>
+        );
+
+      case "section":
+      case "row":
+      case "column":
+        return (
+          <div className="space-y-2 text-sm text-gray-500">
+            <p>Layout blocks use styling controls below.</p>
+            <p>Adjust colors, spacing, and dimensions in the Styling & Spacing tabs.</p>
           </div>
         );
 
@@ -345,7 +608,7 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
       {/* Content */}
       <div className="flex-1 overflow-y-auto">
         <Tabs defaultValue="content" className="w-full">
-          <TabsList className="w-full justify-start rounded-none border-b bg-gray-50 px-4">
+          <TabsList className="w-full justify-start rounded-none border-b bg-gray-50 px-4 h-10">
             <TabsTrigger value="content" className="rounded-none border-b-2">
               Content
             </TabsTrigger>
@@ -364,21 +627,22 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
 
           {/* Styling Tab */}
           <TabsContent value="styling" className="p-4 space-y-4">
+            {/* Colors Section */}
             <div>
               <div
                 className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
-                onClick={() => toggleSection("backgroundColor")}
+                onClick={() => toggleSection("colors")}
               >
                 <span className="text-xs font-semibold text-gray-700">
                   Colors
                 </span>
-                {expandedSections.has("backgroundColor") ? (
+                {expandedSections.has("colors") ? (
                   <ChevronUp className="w-4 h-4" />
                 ) : (
                   <ChevronDown className="w-4 h-4" />
                 )}
               </div>
-              {expandedSections.has("backgroundColor") && (
+              {expandedSections.has("colors") && (
                 <div className="space-y-3">
                   <ColorPicker
                     label="Background Color"
@@ -410,10 +674,21 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
                       })
                     }
                   />
+                  <ColorPicker
+                    label="Border Color"
+                    value={props.borderColor || "#e5e7eb"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, borderColor: value },
+                      })
+                    }
+                  />
                 </div>
               )}
             </div>
 
+            {/* Typography Section */}
             <div>
               <div
                 className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
@@ -453,21 +728,17 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Font Size (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.fontSize || "16"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, fontSize: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
+                  <NumberInput
+                    label="Font Size"
+                    value={props.fontSize || "16"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, fontSize: value },
+                      })
+                    }
+                    unit="px"
+                  />
                   <div>
                     <Label className="text-xs font-semibold text-gray-700 mb-2 block">
                       Font Weight
@@ -489,29 +760,153 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
                         <SelectItem value="400">Regular</SelectItem>
                         <SelectItem value="600">Semibold</SelectItem>
                         <SelectItem value="700">Bold</SelectItem>
+                        <SelectItem value="900">Black</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <NumberInput
+                    label="Line Height"
+                    value={props.lineHeight || "1.5"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, lineHeight: value },
+                      })
+                    }
+                    step={0.1}
+                  />
+                  <NumberInput
+                    label="Letter Spacing"
+                    value={props.letterSpacing || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, letterSpacing: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <div>
+                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                      Text Align
+                    </Label>
+                    <Select
+                      value={props.textAlign || "left"}
+                      onValueChange={(value) =>
+                        onBlockUpdate({
+                          ...block,
+                          properties: { ...props, textAlign: value },
+                        })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="left">Left</SelectItem>
+                        <SelectItem value="center">Center</SelectItem>
+                        <SelectItem value="right">Right</SelectItem>
+                        <SelectItem value="justify">Justify</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
                     <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Line Height
+                      Text Transform
                     </Label>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={props.lineHeight || "1.5"}
-                      onChange={(e) =>
+                    <Select
+                      value={props.textTransform || "none"}
+                      onValueChange={(value) =>
                         onBlockUpdate({
                           ...block,
-                          properties: { ...props, lineHeight: e.target.value },
+                          properties: { ...props, textTransform: value },
                         })
                       }
-                    />
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="uppercase">Uppercase</SelectItem>
+                        <SelectItem value="lowercase">Lowercase</SelectItem>
+                        <SelectItem value="capitalize">Capitalize</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               )}
             </div>
 
+            {/* Borders Section */}
+            <div>
+              <div
+                className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
+                onClick={() => toggleSection("borders")}
+              >
+                <span className="text-xs font-semibold text-gray-700">
+                  Borders
+                </span>
+                {expandedSections.has("borders") ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </div>
+              {expandedSections.has("borders") && (
+                <div className="space-y-3">
+                  <NumberInput
+                    label="Border Width"
+                    value={props.borderWidth || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, borderWidth: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <div>
+                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
+                      Border Style
+                    </Label>
+                    <Select
+                      value={props.borderStyle || "solid"}
+                      onValueChange={(value) =>
+                        onBlockUpdate({
+                          ...block,
+                          properties: { ...props, borderStyle: value },
+                        })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="solid">Solid</SelectItem>
+                        <SelectItem value="dashed">Dashed</SelectItem>
+                        <SelectItem value="dotted">Dotted</SelectItem>
+                        <SelectItem value="double">Double</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <NumberInput
+                    label="Border Radius"
+                    value={props.borderRadius || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, borderRadius: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Effects Section */}
             <div>
               <div
                 className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
@@ -528,21 +923,6 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
               </div>
               {expandedSections.has("effects") && (
                 <div className="space-y-3">
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Border Radius (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.borderRadius || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, borderRadius: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
                   <div>
                     <Label className="text-xs font-semibold text-gray-700 mb-2 block">
                       Shadow
@@ -564,193 +944,28 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
                         <SelectItem value="sm">Small</SelectItem>
                         <SelectItem value="md">Medium</SelectItem>
                         <SelectItem value="lg">Large</SelectItem>
+                        <SelectItem value="xl">Extra Large</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Opacity (%)
-                    </Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={props.opacity || "100"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, opacity: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          {/* Spacing Tab */}
-          <TabsContent value="spacing" className="p-4 space-y-4">
-            <div>
-              <div
-                className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
-                onClick={() => toggleSection("padding")}
-              >
-                <span className="text-xs font-semibold text-gray-700">
-                  Padding
-                </span>
-                {expandedSections.has("padding") ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </div>
-              {expandedSections.has("padding") && (
-                <div className="space-y-3">
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Padding Top (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.paddingTop || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, paddingTop: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Padding Bottom (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.paddingBottom || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, paddingBottom: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Padding Left (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.paddingLeft || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, paddingLeft: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Padding Right (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.paddingRight || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, paddingRight: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
+                  <NumberInput
+                    label="Opacity"
+                    value={props.opacity || "100"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, opacity: value },
+                      })
+                    }
+                    unit="%"
+                    min={0}
+                    max={100}
+                  />
                 </div>
               )}
             </div>
 
-            <div>
-              <div
-                className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
-                onClick={() => toggleSection("margin")}
-              >
-                <span className="text-xs font-semibold text-gray-700">
-                  Margin
-                </span>
-                {expandedSections.has("margin") ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </div>
-              {expandedSections.has("margin") && (
-                <div className="space-y-3">
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Margin Top (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.marginTop || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, marginTop: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Margin Bottom (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.marginBottom || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, marginBottom: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Margin Left (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.marginLeft || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, marginLeft: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Margin Right (px)
-                    </Label>
-                    <Input
-                      type="number"
-                      value={props.marginRight || "0"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, marginRight: e.target.value },
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-
+            {/* Dimensions Section */}
             <div>
               <div
                 className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
@@ -767,38 +982,204 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
               </div>
               {expandedSections.has("dimensions") && (
                 <div className="space-y-3">
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Min Height (px)
-                    </Label>
-                    <Input
-                      type="text"
-                      value={props.minHeight || "auto"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, minHeight: e.target.value },
-                        })
-                      }
-                      placeholder="auto"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-gray-700 mb-2 block">
-                      Max Height (px)
-                    </Label>
-                    <Input
-                      type="text"
-                      value={props.maxHeight || "auto"}
-                      onChange={(e) =>
-                        onBlockUpdate({
-                          ...block,
-                          properties: { ...props, maxHeight: e.target.value },
-                        })
-                      }
-                      placeholder="auto"
-                    />
-                  </div>
+                  <NumberInput
+                    label="Min Height"
+                    value={props.minHeight || "auto"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, minHeight: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Max Height"
+                    value={props.maxHeight || "auto"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, maxHeight: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Width"
+                    value={props.width || "auto"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, width: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
+          {/* Spacing Tab */}
+          <TabsContent value="spacing" className="p-4 space-y-4">
+            {/* Padding Section */}
+            <div>
+              <div
+                className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
+                onClick={() => toggleSection("padding")}
+              >
+                <span className="text-xs font-semibold text-gray-700">
+                  Padding
+                </span>
+                {expandedSections.has("padding") ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </div>
+              {expandedSections.has("padding") && (
+                <div className="space-y-3">
+                  <NumberInput
+                    label="Padding Top"
+                    value={props.paddingTop || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, paddingTop: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Padding Bottom"
+                    value={props.paddingBottom || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, paddingBottom: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Padding Left"
+                    value={props.paddingLeft || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, paddingLeft: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Padding Right"
+                    value={props.paddingRight || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, paddingRight: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Margin Section */}
+            <div>
+              <div
+                className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
+                onClick={() => toggleSection("margin")}
+              >
+                <span className="text-xs font-semibold text-gray-700">
+                  Margin
+                </span>
+                {expandedSections.has("margin") ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </div>
+              {expandedSections.has("margin") && (
+                <div className="space-y-3">
+                  <NumberInput
+                    label="Margin Top"
+                    value={props.marginTop || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, marginTop: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Margin Bottom"
+                    value={props.marginBottom || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, marginBottom: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Margin Left"
+                    value={props.marginLeft || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, marginLeft: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                  <NumberInput
+                    label="Margin Right"
+                    value={props.marginRight || "0"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, marginRight: value },
+                      })
+                    }
+                    unit="px"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Gap Section */}
+            <div>
+              <div
+                className="flex items-center justify-between cursor-pointer mb-3 pb-3 border-b"
+                onClick={() => toggleSection("gap")}
+              >
+                <span className="text-xs font-semibold text-gray-700">
+                  Gap (for rows/flex)
+                </span>
+                {expandedSections.has("gap") ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </div>
+              {expandedSections.has("gap") && (
+                <div className="space-y-3">
+                  <NumberInput
+                    label="Gap"
+                    value={props.gap || "12"}
+                    onChange={(value) =>
+                      onBlockUpdate({
+                        ...block,
+                        properties: { ...props, gap: value },
+                      })
+                    }
+                    unit="px"
+                  />
                 </div>
               )}
             </div>

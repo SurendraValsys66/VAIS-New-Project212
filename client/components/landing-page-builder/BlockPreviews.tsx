@@ -1,5 +1,6 @@
 import React from "react";
 import { LandingPageBlock } from "./types";
+import { getBlockStyles } from "./utils";
 export {
   SectionBlockPreview,
   RowBlockPreview,
@@ -19,21 +20,26 @@ export const HeaderBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
-      className={`bg-white border-2 border-gray-200 cursor-pointer transition-all ${
-        isSelected ? "border-valasys-orange" : "hover:border-gray-300"
+      className={`border-2 cursor-pointer transition-all ${
+        isSelected ? "border-valasys-orange" : "border-gray-200 hover:border-gray-300"
       }`}
+      style={{
+        ...blockStyles,
+        backgroundColor: props.backgroundColor || "#ffffff",
+      }}
     >
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
-        <div className="font-bold text-gray-900">{props.logoText}</div>
-        <div className="flex gap-4 text-sm text-gray-600">
+        <div className="font-bold" style={{ color: props.textColor || "#1f2937" }}>{props.logoText}</div>
+        <div className="flex gap-4 text-sm" style={{ color: props.textColor || "#4b5563" }}>
           {props.navigationLinks?.map((link: any, i: number) => (
             <span key={i}>{link.label}</span>
           ))}
         </div>
-        <button className="px-4 py-2 bg-valasys-orange text-white text-sm font-medium rounded hover:bg-orange-600 transition-colors">
+        <button className="px-4 py-2 text-white text-sm font-medium rounded hover:opacity-90 transition-opacity" style={{ backgroundColor: props.ctaButtonColor || "#FF6A00" }}>
           {props.ctaButtonText}
         </button>
       </div>
@@ -47,6 +53,7 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
@@ -54,15 +61,15 @@ export const HeroBlockPreview: React.FC<BlockPreviewProps> = ({
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
       style={{
-        backgroundColor: props.backgroundColor,
+        ...blockStyles,
         minHeight: props.minHeight || "300px",
       }}
     >
       <div className="flex flex-col items-center justify-center h-full px-8 py-8 text-center">
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+        <h1 className="text-5xl font-bold mb-4" style={{ color: props.textColor || "#1f2937" }}>
           {props.headline}
         </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+        <p className="text-xl mb-8 max-w-2xl" style={{ color: props.textColor || "#4b5563" }}>
           {props.subheading}
         </p>
         <div className="flex gap-4">
@@ -95,19 +102,20 @@ export const FeaturesBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-8">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+        <h2 className="text-3xl font-bold text-center mb-2" style={{ color: props.textColor || "#1f2937" }}>
           {props.heading}
         </h2>
-        <p className="text-center text-gray-600 mb-8">{props.description}</p>
+        <p className="text-center mb-8" style={{ color: props.textColor || "#4b5563" }}>{props.description}</p>
         <div
           className="gap-8"
           style={{
@@ -136,16 +144,17 @@ export const TestimonialsBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-8">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-3xl font-bold text-center mb-8" style={{ color: props.textColor || "#1f2937" }}>
           {props.heading}
         </h2>
         <div className="grid grid-cols-3 gap-8">
@@ -175,13 +184,14 @@ export const AboutBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-8">
         <div className="grid grid-cols-2 gap-8 items-center">
@@ -191,10 +201,10 @@ export const AboutBlockPreview: React.FC<BlockPreviewProps> = ({
             </div>
           )}
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold mb-4" style={{ color: props.textColor || "#1f2937" }}>
               {props.heading}
             </h2>
-            <p className="text-gray-600 mb-6 leading-relaxed">
+            <p className="mb-6 leading-relaxed" style={{ color: props.textColor || "#4b5563" }}>
               {props.content}
             </p>
             <button className="px-6 py-2 bg-valasys-orange text-white font-medium rounded hover:bg-orange-600 transition-colors">
@@ -218,19 +228,20 @@ export const ContactFormBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-8 max-w-2xl mx-auto">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        <h2 className="text-3xl font-bold mb-2" style={{ color: props.textColor || "#1f2937" }}>
           {props.heading}
         </h2>
-        <p className="text-gray-600 mb-6">{props.description}</p>
+        <p className="mb-6" style={{ color: props.textColor || "#4b5563" }}>{props.description}</p>
         <form className="space-y-4">
           {props.fields?.map((field: any) => (
             <div key={field.id}>
@@ -270,16 +281,14 @@ export const FooterBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{
-        backgroundColor: props.backgroundColor,
-        color: props.textColor,
-      }}
+      style={blockStyles}
     >
       <div className="px-8 py-12">
         <div className="grid grid-cols-3 gap-8 mb-8">
@@ -328,10 +337,11 @@ export const SpacerBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
-      style={{ height: props.height || "60px" }}
+      style={{ ...blockStyles, height: props.height || "60px" }}
       className={`border-2 border-dashed cursor-pointer transition-all ${
         isSelected
           ? "border-valasys-orange bg-orange-50"
@@ -347,19 +357,20 @@ export const PricingBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-8">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">
+        <h2 className="text-3xl font-bold text-center mb-2" style={{ color: props.textColor || "#1f2937" }}>
           {props.heading}
         </h2>
-        <p className="text-center text-gray-600 mb-8">{props.subheading}</p>
+        <p className="text-center mb-8" style={{ color: props.textColor || "#4b5563" }}>{props.subheading}</p>
         <div className="grid grid-cols-3 gap-8">
           {props.pricingTiers?.map((tier: any) => (
             <div
@@ -409,16 +420,17 @@ export const FaqBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-8 max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+        <h2 className="text-3xl font-bold text-center mb-8" style={{ color: props.textColor || "#1f2937" }}>
           {props.heading}
         </h2>
         <div className="space-y-4">
@@ -448,19 +460,20 @@ export const SignupBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-8 max-w-2xl mx-auto text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        <h2 className="text-3xl font-bold mb-2" style={{ color: props.textColor || "#1f2937" }}>
           {props.heading}
         </h2>
-        <p className="text-gray-600 mb-6">{props.subheading}</p>
+        <p className="mb-6" style={{ color: props.textColor || "#4b5563" }}>{props.subheading}</p>
         <div className="flex gap-3">
           <input
             type="email"
@@ -488,13 +501,14 @@ export const PricingFooterBlockPreview: React.FC<BlockPreviewProps> = ({
   onSelect,
 }) => {
   const props = block.properties;
+  const blockStyles = getBlockStyles(props);
   return (
     <div
       onClick={onSelect}
       className={`cursor-pointer transition-all border-2 ${
         isSelected ? "border-valasys-orange" : "border-gray-200"
       }`}
-      style={{ backgroundColor: props.backgroundColor }}
+      style={blockStyles}
     >
       <div className="px-8 py-12">
         <div

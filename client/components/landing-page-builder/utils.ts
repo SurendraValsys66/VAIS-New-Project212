@@ -471,3 +471,68 @@ export const createNewLandingPage = (
     createFooterBlock(),
   ],
 });
+
+// Utility function to convert block properties to inline styles
+export const getBlockStyles = (props: Record<string, any>): React.CSSProperties => {
+  const styles: React.CSSProperties = {};
+
+  if (props.backgroundColor) styles.backgroundColor = props.backgroundColor;
+  if (props.textColor) styles.color = props.textColor;
+  if (props.minHeight) styles.minHeight = props.minHeight;
+  if (props.maxHeight) styles.maxHeight = props.maxHeight;
+  if (props.width) styles.width = props.width;
+  if (props.padding) styles.padding = props.padding;
+  if (props.margin) styles.margin = props.margin;
+  if (props.paddingTop) styles.paddingTop = `${props.paddingTop}px`;
+  if (props.paddingBottom) styles.paddingBottom = `${props.paddingBottom}px`;
+  if (props.paddingLeft) styles.paddingLeft = `${props.paddingLeft}px`;
+  if (props.paddingRight) styles.paddingRight = `${props.paddingRight}px`;
+  if (props.marginTop) styles.marginTop = `${props.marginTop}px`;
+  if (props.marginBottom) styles.marginBottom = `${props.marginBottom}px`;
+  if (props.marginLeft) styles.marginLeft = `${props.marginLeft}px`;
+  if (props.marginRight) styles.marginRight = `${props.marginRight}px`;
+
+  if (props.borderRadius) styles.borderRadius = `${props.borderRadius}px`;
+  if (props.borderWidth || props.borderStyle) {
+    styles.borderWidth = `${props.borderWidth || 1}px`;
+    styles.borderStyle = props.borderStyle || "solid";
+    styles.borderColor = props.borderColor || "#e5e7eb";
+  }
+
+  if (props.fontSize) styles.fontSize = `${props.fontSize}px`;
+  if (props.fontWeight) styles.fontWeight = props.fontWeight;
+  if (props.lineHeight) styles.lineHeight = props.lineHeight;
+  if (props.letterSpacing) styles.letterSpacing = `${props.letterSpacing}px`;
+  if (props.textAlign) styles.textAlign = props.textAlign as any;
+  if (props.textTransform) styles.textTransform = props.textTransform as any;
+
+  if (props.opacity) styles.opacity = parseInt(props.opacity) / 100;
+  if (props.gap) styles.gap = `${props.gap}px`;
+
+  // Shadow mapping
+  if (props.shadow && props.shadow !== "none") {
+    const shadowMap: Record<string, string> = {
+      sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      md: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+      lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+      xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+    };
+    if (shadowMap[props.shadow]) {
+      styles.boxShadow = shadowMap[props.shadow];
+    }
+  }
+
+  // Font family mapping
+  if (props.fontFamily) {
+    const fontMap: Record<string, string> = {
+      serif: 'Georgia, serif',
+      mono: '"Monaco", "Courier New", monospace',
+      system: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    };
+    if (fontMap[props.fontFamily]) {
+      styles.fontFamily = fontMap[props.fontFamily];
+    }
+  }
+
+  return styles;
+};

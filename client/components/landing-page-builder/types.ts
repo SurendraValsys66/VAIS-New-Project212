@@ -22,6 +22,18 @@ export interface LandingPageBlockProperties extends Record<string, any> {
   marginBottom?: string;
   marginLeft?: string;
   marginRight?: string;
+  // Borders
+  borderColor?: string;
+  borderWidth?: string;
+  borderStyle?: string;
+  // Typography
+  letterSpacing?: string;
+  textAlign?: string;
+  textTransform?: string;
+  // Dimensions
+  width?: string;
+  // Gap (for flex/grid)
+  gap?: string;
 }
 
 export interface LandingPageBlock {
