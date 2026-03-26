@@ -76,6 +76,53 @@ const NumberInput: React.FC<{
   </div>
 );
 
+const SpacingInput: React.FC<{
+  label: string;
+  value: string | number;
+  unit: "px" | "%";
+  onValueChange: (value: string) => void;
+  onUnitChange: (unit: "px" | "%") => void;
+}> = ({ label, value, unit, onValueChange, onUnitChange }) => (
+  <div className="flex gap-1 items-center">
+    <span className="text-xs text-gray-500 w-4">⊞</span>
+    <Input
+      type="number"
+      value={value}
+      onChange={(e) => onValueChange(e.target.value)}
+      className="w-12 text-xs h-8"
+    />
+    <Select value={unit} onValueChange={(val) => onUnitChange(val as "px" | "%")}>
+      <SelectTrigger className="w-14 h-8">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="px">px</SelectItem>
+        <SelectItem value="%">%</SelectItem>
+      </SelectContent>
+    </Select>
+    <div className="flex flex-col gap-0">
+      <button
+        onClick={() => {
+          const current = Number(value || "0");
+          onValueChange(String(current + 1));
+        }}
+        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+      >
+        ▲
+      </button>
+      <button
+        onClick={() => {
+          const current = Number(value || "0");
+          onValueChange(String(Math.max(0, current - 1)));
+        }}
+        className="text-xs text-gray-600 hover:text-gray-900 leading-none"
+      >
+        ▼
+      </button>
+    </div>
+  </div>
+);
+
 export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
   block,
   onBlockUpdate,
@@ -1040,52 +1087,48 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
               {expandedSections.has("padding") && (
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { key: "paddingTop" },
-                    { key: "paddingRight" },
-                    { key: "paddingBottom" },
-                    { key: "paddingLeft" },
-                  ].map(({ key }) => (
-                    <div key={key} className="flex gap-1 items-center">
-                      <span className="text-xs text-gray-500">⊞</span>
-                      <Input
-                        type="number"
-                        value={props[key as keyof typeof props] || "0"}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            properties: { ...props, [key]: e.target.value },
-                          })
-                        }
-                        className="w-12 text-xs h-8"
-                      />
-                      <span className="text-xs text-gray-500 w-5">px</span>
-                      <div className="flex flex-col gap-0">
-                        <button
-                          onClick={() => {
-                            const current = Number(props[key as keyof typeof props] || "0");
-                            onBlockUpdate({
-                              ...block,
-                              properties: { ...props, [key]: String(current + 1) },
-                            });
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▲
-                        </button>
-                        <button
-                          onClick={() => {
-                            const current = Number(props[key as keyof typeof props] || "0");
-                            onBlockUpdate({
-                              ...block,
-                              properties: { ...props, [key]: String(Math.max(0, current - 1)) },
-                            });
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▼
-                        </button>
-                      </div>
-                    </div>
+                    { key: "paddingTop", label: "T" },
+                    { key: "paddingRight", label: "R" },
+                    { key: "paddingBottom", label: "B" },
+                    { key: "paddingLeft", label: "L" },
+                  ].map(({ key, label }) => (
+                    <SpacingInput
+                      key={key}
+                      label={label}
+                      value={
+                        typeof props[key as keyof typeof props] === "string" &&
+                        (props[key as keyof typeof props] as string).includes("%")
+                          ? (props[key as keyof typeof props] as string).replace("%", "")
+                          : props[key as keyof typeof props] || "0"
+                      }
+                      unit={
+                        typeof props[key as keyof typeof props] === "string" &&
+                        (props[key as keyof typeof props] as string).includes("%")
+                          ? "%"
+                          : "px"
+                      }
+                      onValueChange={(value) => {
+                        const unit =
+                          typeof props[key as keyof typeof props] === "string" &&
+                          (props[key as keyof typeof props] as string).includes("%")
+                            ? "%"
+                            : "px";
+                        onBlockUpdate({
+                          ...block,
+                          properties: { ...props, [key]: `${value}${unit}` },
+                        });
+                      }}
+                      onUnitChange={(newUnit) => {
+                        const value =
+                          typeof props[key as keyof typeof props] === "string"
+                            ? (props[key as keyof typeof props] as string).replace(/[%px]/g, "")
+                            : props[key as keyof typeof props] || "0";
+                        onBlockUpdate({
+                          ...block,
+                          properties: { ...props, [key]: `${value}${newUnit}` },
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               )}
@@ -1109,52 +1152,48 @@ export const EnhancedSettingsPanel: React.FC<EnhancedSettingsPanelProps> = ({
               {expandedSections.has("margin") && (
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { key: "marginTop" },
-                    { key: "marginRight" },
-                    { key: "marginBottom" },
-                    { key: "marginLeft" },
-                  ].map(({ key }) => (
-                    <div key={key} className="flex gap-1 items-center">
-                      <span className="text-xs text-gray-500">⊞</span>
-                      <Input
-                        type="number"
-                        value={props[key as keyof typeof props] || "0"}
-                        onChange={(e) =>
-                          onBlockUpdate({
-                            ...block,
-                            properties: { ...props, [key]: e.target.value },
-                          })
-                        }
-                        className="w-12 text-xs h-8"
-                      />
-                      <span className="text-xs text-gray-500 w-5">px</span>
-                      <div className="flex flex-col gap-0">
-                        <button
-                          onClick={() => {
-                            const current = Number(props[key as keyof typeof props] || "0");
-                            onBlockUpdate({
-                              ...block,
-                              properties: { ...props, [key]: String(current + 1) },
-                            });
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▲
-                        </button>
-                        <button
-                          onClick={() => {
-                            const current = Number(props[key as keyof typeof props] || "0");
-                            onBlockUpdate({
-                              ...block,
-                              properties: { ...props, [key]: String(Math.max(0, current - 1)) },
-                            });
-                          }}
-                          className="text-xs text-gray-600 hover:text-gray-900 leading-none"
-                        >
-                          ▼
-                        </button>
-                      </div>
-                    </div>
+                    { key: "marginTop", label: "T" },
+                    { key: "marginRight", label: "R" },
+                    { key: "marginBottom", label: "B" },
+                    { key: "marginLeft", label: "L" },
+                  ].map(({ key, label }) => (
+                    <SpacingInput
+                      key={key}
+                      label={label}
+                      value={
+                        typeof props[key as keyof typeof props] === "string" &&
+                        (props[key as keyof typeof props] as string).includes("%")
+                          ? (props[key as keyof typeof props] as string).replace("%", "")
+                          : props[key as keyof typeof props] || "0"
+                      }
+                      unit={
+                        typeof props[key as keyof typeof props] === "string" &&
+                        (props[key as keyof typeof props] as string).includes("%")
+                          ? "%"
+                          : "px"
+                      }
+                      onValueChange={(value) => {
+                        const unit =
+                          typeof props[key as keyof typeof props] === "string" &&
+                          (props[key as keyof typeof props] as string).includes("%")
+                            ? "%"
+                            : "px";
+                        onBlockUpdate({
+                          ...block,
+                          properties: { ...props, [key]: `${value}${unit}` },
+                        });
+                      }}
+                      onUnitChange={(newUnit) => {
+                        const value =
+                          typeof props[key as keyof typeof props] === "string"
+                            ? (props[key as keyof typeof props] as string).replace(/[%px]/g, "")
+                            : props[key as keyof typeof props] || "0";
+                        onBlockUpdate({
+                          ...block,
+                          properties: { ...props, [key]: `${value}${newUnit}` },
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               )}
