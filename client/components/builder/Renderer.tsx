@@ -235,6 +235,11 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
       <div
         ref={drag}
         onClick={(e) => {
+          // Allow contentEditable elements (like buttons) to handle their own clicks
+          const target = e.target as HTMLElement;
+          if (target.contentEditable === "true" || target.closest("[contenteditable='true']")) {
+            return;
+          }
           e.stopPropagation();
           onSelect?.(component.id);
         }}
@@ -432,33 +437,69 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
           </p>
         </div>,
       );
-    case "button":
+    case "button": {
+      const buttonRef = React.useRef<HTMLButtonElement>(null);
+      const isFocusedRef = React.useRef(false);
+      const isDefaultTextRef = React.useRef(false);
+      const isFirstKeyPressRef = React.useRef(true);
+
+      React.useEffect(() => {
+        if (buttonRef.current && !isFocusedRef.current) {
+          const newText = component.contentText || "Get Started";
+          if (buttonRef.current.textContent !== newText) {
+            buttonRef.current.textContent = newText;
+            isDefaultTextRef.current = !component.contentText;
+            isFirstKeyPressRef.current = true;
+          }
+        }
+      }, [component.contentText]);
+
       return wrapWithControls(
         <div className="p-4 h-full flex items-center justify-start">
           <button
+            ref={buttonRef}
             contentEditable
             suppressContentEditableWarning
             onFocus={(e) => {
-              // Clear default text when user focuses to edit
-              if (e.currentTarget.textContent === "Get Started" && !component.contentText) {
+              isFocusedRef.current = true;
+              isFirstKeyPressRef.current = true;
+              // Select all text when focusing
+              setTimeout(() => {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(e.currentTarget);
+                selection?.removeAllRanges();
+                selection?.addRange(range);
+              }, 0);
+            }}
+            onKeyDown={(e) => {
+              // Clear default text on first keystroke
+              if (isFirstKeyPressRef.current && isDefaultTextRef.current && e.key !== "Enter") {
                 e.currentTarget.textContent = "";
+                isFirstKeyPressRef.current = false;
+              }
+              if (e.key === "Enter") {
+                e.preventDefault();
+                (e.currentTarget as any).blur();
               }
             }}
             onInput={(e) => {
               const text = e.currentTarget.textContent || "";
+              isDefaultTextRef.current = false;
               onUpdate(component.id, { contentText: text });
             }}
             onBlur={(e) => {
+              isFocusedRef.current = false;
               const text = e.currentTarget.textContent || "";
-              // Restore default if empty
               if (!text) {
                 e.currentTarget.textContent = "Get Started";
+                isDefaultTextRef.current = true;
                 onUpdate(component.id, { contentText: "" });
               } else {
-                onUpdate(component.id, { contentText: text });
+                isDefaultTextRef.current = false;
               }
             }}
-            className="px-8 py-6 text-lg font-semibold rounded-xl shadow-lg focus:outline-none focus:ring-0"
+            className="px-8 py-6 text-lg font-semibold rounded-xl shadow-lg focus:outline-none focus:ring-0 whitespace-nowrap"
             style={{
               backgroundColor: component.backgroundColor || "#ea580c",
               color: component.textColor || "#ffffff",
@@ -473,18 +514,33 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
               border: "none !important",
               boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1) !important",
               cursor: "pointer",
+              minWidth: "fit-content",
             }}
-          >
-            {component.contentText || "Get Started"}
-          </button>
+          />
         </div>,
       );
+    }
     case "image":
       return wrapWithControls(
         <div className="p-4 h-full" style={getComponentStyles()}>
-          <div className="h-full bg-gray-100 flex items-center justify-center rounded-2xl text-gray-400 border-2 border-dashed border-gray-200 min-h-[150px]">
-            Image Placeholder
-          </div>
+          {component.imageUrl ? (
+            <img
+              src={component.imageUrl}
+              alt={component.altText || "Image"}
+              className="h-full w-full rounded-2xl object-cover"
+              style={{
+                maxHeight: "100%",
+                maxWidth: "100%",
+              }}
+            />
+          ) : (
+            <div className="h-full bg-gray-100 flex items-center justify-center rounded-2xl text-gray-400 border-2 border-dashed border-gray-200 min-h-[150px]">
+              <div className="text-center">
+                <div className="text-sm font-medium">Image Placeholder</div>
+                <div className="text-xs opacity-70 mt-1">Add an image URL in the settings panel</div>
+              </div>
+            </div>
+          )}
         </div>,
       );
     case "video":

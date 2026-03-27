@@ -42,6 +42,8 @@ interface StyleState {
   backgroundOpacity: string;
   contentVisibility: "all" | "desktop" | "tablet" | "mobile";
   displayConditions: string[];
+  imageUrl: string;
+  altText: string;
 }
 
 interface SpacingState {
@@ -96,6 +98,8 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
     backgroundOpacity: "100",
     contentVisibility: "all",
     displayConditions: [],
+    imageUrl: "",
+    altText: "",
   });
 
   const [spacing, setSpacing] = React.useState<SpacingState>({
@@ -187,6 +191,8 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         backgroundOpacity: component.backgroundOpacity ? String(component.backgroundOpacity) : (props.backgroundOpacity ? String(props.backgroundOpacity) : "100"),
         contentVisibility: (component.contentVisibility || props.contentVisibility || "all") as "all" | "desktop" | "tablet" | "mobile",
         displayConditions: component.displayConditions || props.displayConditions || [],
+        imageUrl: component.imageUrl || props.imageUrl || "",
+        altText: component.altText || props.altText || "",
       });
 
       // Initialize units from component
@@ -521,6 +527,41 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
                       placeholder={component.type === "heading" ? "Enter heading text..." : "Enter paragraph text..."}
                     />
                   )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Image Section - for image components */}
+        {component.type === "image" && (
+          <div>
+            <SectionHeader title="Image" section="content" />
+            {expandedSections.content && (
+              <div className="px-4 py-3 space-y-3 bg-gray-50 border-b border-gray-200">
+                <div>
+                  <label className="text-xs font-semibold text-gray-700 block mb-2">Image URL</label>
+                  <Input
+                    type="text"
+                    value={styles.imageUrl}
+                    onChange={(e) => {
+                      handleStyleChange("imageUrl", e.target.value);
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-700 block mb-2">Alt Text</label>
+                  <Input
+                    type="text"
+                    value={styles.altText}
+                    onChange={(e) => {
+                      handleStyleChange("altText", e.target.value);
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Description of the image"
+                  />
                 </div>
               </div>
             )}

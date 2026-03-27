@@ -61,6 +61,11 @@ export interface BuilderComponent {
   // Content visibility properties
   contentVisibility?: "all" | "desktop" | "tablet" | "mobile";
   displayConditions?: string[];
+  // Image component properties
+  imageUrl?: string;
+  altText?: string;
+  // Text content
+  contentText?: string;
 }
 
 export const DRAG_TYPES = {
