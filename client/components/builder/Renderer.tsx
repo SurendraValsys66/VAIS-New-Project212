@@ -523,9 +523,24 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
     case "image":
       return wrapWithControls(
         <div className="p-4 h-full" style={getComponentStyles()}>
-          <div className="h-full bg-gray-100 flex items-center justify-center rounded-2xl text-gray-400 border-2 border-dashed border-gray-200 min-h-[150px]">
-            Image Placeholder
-          </div>
+          {component.imageUrl ? (
+            <img
+              src={component.imageUrl}
+              alt={component.altText || "Image"}
+              className="h-full w-full rounded-2xl object-cover"
+              style={{
+                maxHeight: "100%",
+                maxWidth: "100%",
+              }}
+            />
+          ) : (
+            <div className="h-full bg-gray-100 flex items-center justify-center rounded-2xl text-gray-400 border-2 border-dashed border-gray-200 min-h-[150px]">
+              <div className="text-center">
+                <div className="text-sm font-medium">Image Placeholder</div>
+                <div className="text-xs opacity-70 mt-1">Add an image URL in the settings panel</div>
+              </div>
+            </div>
+          )}
         </div>,
       );
     case "video":
